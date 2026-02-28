@@ -1,0 +1,22 @@
+services:
+  php:
+    build: ./docker/php
+    volumes:
+      - ./src:/var/www
+    working_dir: /var/www
+
+  nginx:
+    image: nginx:1.21.1
+    ports:
+      - "8081:80"
+    volumes:
+      - ./src:/var/www
+      - ./docker/nginx:/etc/nginx/conf.d
+    depends_on:
+      - php
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: laravel
